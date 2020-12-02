@@ -1,0 +1,9 @@
+
+# Site Settings
+locale                   : "ko-KR"
+title                    : "Bino Github"
+title_separator          : "::"
+name                     : "Bino"
+description              : "Bino Github Portfolio Blog"
+url                      : "https://bino0216.github.io"
+baseurl                  : "" # the subpath of your site, e.g. "/blog"
