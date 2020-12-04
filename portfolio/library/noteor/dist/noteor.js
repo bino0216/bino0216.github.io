@@ -44,7 +44,7 @@
                 if(!element.getAttribute('contentEditable'))
                     element.setAttribute('contentEditable', '');
                     
-                element.addEventListener('keypress', this.blockKeyDownEvent);
+                element.addEventListener('input', this.blockKeyDownEvent);
             }
 
             const init = () => {
@@ -369,7 +369,7 @@
             const blockKeyDownEvent = _this.blockKeyDownEvent = function(e) {
                 const keyCode = e.keyCode;
 
-                alert('test => ', e.keyCode);
+                alert('down => ', e.keyCode);
 
                 if(e.shiftKey && e.keyCode == 13)
                     hotKey.shift_enter(e, this);
