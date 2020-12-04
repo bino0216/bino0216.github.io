@@ -367,7 +367,7 @@
                 }
             }
             const blockKeyDownEvent = _this.blockKeyDownEvent = function(e) {
-                const keyCode = e.keyCode;
+                const keyCode = e.which;
 
                 if(e.shiftKey && e.keyCode == 13)
                     hotKey.shift_enter(e, this);
