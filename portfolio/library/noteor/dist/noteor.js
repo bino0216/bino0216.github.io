@@ -44,7 +44,7 @@
                 if(!element.getAttribute('contentEditable'))
                     element.setAttribute('contentEditable', '');
                     
-                element.addEventListener('keydown', this.blockKeyDownEvent);
+                element.addEventListener('keypress', this.blockKeyDownEvent);
             }
 
             const init = () => {
