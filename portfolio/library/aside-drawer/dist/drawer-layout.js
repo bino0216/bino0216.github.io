@@ -4,9 +4,9 @@
         module.exports = factory;
     // AMD
     else if(typeof define === 'function' && define.amd)
-        define(factory)
+        define(factory);
     else
-        global.drawerLayout = factory
+        global.drawerLayout = factory;
 })(this, function drawerLayout(v = {}) {
     if(this.constructor.name != 'drawerLayout')
         return console.error('must to call by constructor');
@@ -14,7 +14,9 @@
     function setDefaultProperty(property, value) {
         v[property] = v[property] ? v[property] : value;
     }
-    setDefaultProperty('speed', 6);
+    setDefaultProperty('speed', 12);
+
+    // setDefaultProperty('duration', 500);
 
     setDefaultProperty('direction', 'left');
 
@@ -34,6 +36,9 @@
     setDefaultProperty('changeCallback', () => null);
 
     const is_X_axis = v.direction == 'left' || v.direction == 'right';
+
+    // 사용자가 화면을 조작중인지
+    let touching = false;
 
     const drawPercent = (() => {
         let translate;
@@ -68,7 +73,31 @@
         }
     })();
 
+
     {
+        // /* deprecated */
+        // const tLoop = (show) => {
+        //     v.element.style.willChange = null;
+        //     v.element.style.transition = null;
+        //     if(isAnimating) clearTimeout(this.isAnimating);
+
+        //     const duration = v.duration * .001;
+        //     this.isAnimating = setTimeout(() => {
+        //         isAnimating = false;
+        //         v.element.style.willChange = null;
+        //         v.element.style.transition = null;
+        //     }, duration * 1000);
+
+        //     v.element.style.willChange = 'transform';
+        //     v.element.style.transition = 
+        //         'transform ' + duration + 's ' + 'cubic-bezier(0.31, 1, 0.58, 1) 0s';
+
+        //     percent = show ? 100 : 0;
+        //     drawPercent();
+        //     isOpened = show;
+            
+        // }
+
         // 1 = show, 0 = hide
         let speed;
         const instance = (show) => {
@@ -77,8 +106,7 @@
             const isLimited = show ? () => (percent >= limit) : () => (percent <= limit);
 
             function loop() {
-                if(isLimited()) return;
-
+                if(isLimited() || touching) return;
 
                 percent += speed;
 
@@ -127,6 +155,8 @@
 
         const event = {
             start: (function(e) {
+                touching = true;
+
                 const PixelAxis =
                     is_X_axis ? 
                         isLeftOrTop ?
@@ -167,13 +197,14 @@
                 }
             })(),
             move: function(e) {
-                this.sival = setTimeout(() => {
-                    clearTimeout(this.sival);
+                this.__move = setTimeout(() => {
+                    clearTimeout(this.__move);
                     percent = getCurrentPercent(e);
                     drawPercent();
                 }, 16)
             },
             end: (e) => {
+                touching = false;
                 v.element.style.willChange = null;
 
                 if(isOpened)
@@ -189,8 +220,6 @@
             }
         };
 
-        const el = v.element;
-        
         window.addEventListener('touchstart', event.start)
         window.addEventListener('touchend', event.end)
     }

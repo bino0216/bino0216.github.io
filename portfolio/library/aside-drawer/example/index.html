@@ -6,16 +6,22 @@ html, body {
     margin: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 body {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.btn-wrap {
+#btn-wrap {
     border-radius: 999px;
     overflow: hidden;
+    transition: transform .2s ease-out;
 }
+#btn-wrap.top { transform: translate(0, 100px) }
+#btn-wrap.bottom { transform: translate(0, -100px) }
+#btn-wrap.left { transform: translate(100px, 0) }
+#btn-wrap.right { transform: translate(-100px, 0) }
 button {
     padding: 10px 20px;
     margin: 0;
@@ -73,12 +79,12 @@ aside.bottom {
     position: fixed;
     opacity: 0;
     display: none;
-    transition: transform .15s;
+    transition: opacity .15s ease-out;
     background: #565656c7;
 }
 </style>
 <body>
-    <div class="btn-wrap">
+    <div id="btn-wrap">
         <button id="top">top</button>
         <button id="left">left</button>
         <button id="right">right</button>
@@ -91,26 +97,34 @@ aside.bottom {
     <aside class="bottom"></aside>
     <script src="../dist/drawer-layout.js"></script>
     <script>
-        const asides = ['top', 'left', 'right', 'bottom'];
+        const directions = ['top', 'left', 'right', 'bottom'];
 
         const fog = document.querySelector('.fog');
-        asides.map(direction => {
+        directions.map(direction => {
             const aside = document.querySelector('.' + direction);
             const drawer = new drawerLayout({
                 element: aside,
-                direction: direction,
+                direction,
                 allowToUser: true,
 
                 changeCallback: (percent) => {
                     !percent ? fog.style.display = 'none' : fog.style.display = 'block';
+                    !percent ? btnWrap.className = null : btnWrap.className = direction;
 
+
+                    console.log(percent)
                     fog.style.opacity = percent * .01;
                 }
             })
 
             const button = document.getElementById(direction);
-            button.addEventListener('click', _ => drawer.open());
-            fog.addEventListener('click', () => drawer.close())
+            const btnWrap = document.getElementById('btn-wrap');
+            button.addEventListener('click', _ => {
+                drawer.open();
+            });
+            fog.addEventListener('click', () => {
+                drawer.close();
+            });
         })
     </script>
 </body>
