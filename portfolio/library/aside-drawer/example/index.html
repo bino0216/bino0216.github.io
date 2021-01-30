@@ -2,6 +2,9 @@
 <html>
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
 <style>
+* {
+    user-select: none;
+}
 html, body {
     margin: 0;
     width: 100%;
@@ -105,7 +108,7 @@ aside.bottom {
             const drawer = new drawerLayout({
                 element: aside,
                 direction,
-                allowToUser: true,
+                allowToDirectSpread: true,
 
                 changeCallback: (percent) => {
                     !percent ? fog.style.display = 'none' : fog.style.display = 'block';
